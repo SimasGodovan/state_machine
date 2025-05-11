@@ -1,0 +1,166 @@
+[gd_scene load_steps=17 format=3 uid="uid://bmwgamwbsy075"]
+
+[ext_resource type="Script" uid="uid://daqnek6v3xuyu" path="res://scenes/agents/player/player.gd" id="1_afts6"]
+[ext_resource type="Texture2D" uid="uid://c242g0323in21" path="res://assets/agents/player.png" id="1_mlbbj"]
+[ext_resource type="Script" uid="uid://q6ccg3y8fflb" path="res://scenes/agents/player/states/idle.gd" id="3_eje3e"]
+[ext_resource type="Script" uid="uid://cmaquvaugcwe2" path="res://scenes/agents/player/states/move.gd" id="4_j77xm"]
+[ext_resource type="Script" uid="uid://bhmad4bx3nl4n" path="res://scenes/agents/player/states/jump.gd" id="5_82w8a"]
+[ext_resource type="Script" uid="uid://015lhtgl4lan" path="res://scenes/agents/player/states/fall.gd" id="6_82w8a"]
+[ext_resource type="Script" uid="uid://ds666hbh8oqf8" path="res://scenes/agents/player/states/attack.gd" id="7_qcst6"]
+[ext_resource type="Script" uid="uid://dtugoiat5pj3g" path="res://scenes/agents/player/states/air_attack.gd" id="8_deemb"]
+[ext_resource type="Script" uid="uid://rugaqexljdgj" path="res://scenes/agents/player/states/crouch.gd" id="9_tige2"]
+
+[sub_resource type="Animation" id="Animation_afts6"]
+resource_name = "Idle"
+loop_mode = 1
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0), Vector2i(4, 0), Vector2i(5, 0), Vector2i(6, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_eje3e"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_tige2"]
+resource_name = "Move"
+loop_mode = 1
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 3), Vector2i(1, 3), Vector2i(2, 3), Vector2i(3, 3), Vector2i(4, 3), Vector2i(5, 3), Vector2i(6, 3), Vector2i(7, 3)]
+}
+
+[sub_resource type="Animation" id="Animation_mvh0q"]
+resource_name = "Jump"
+length = 0.625
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 4), Vector2i(1, 4), Vector2i(2, 4), Vector2i(3, 4), Vector2i(4, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_ujf17"]
+resource_name = "Fall"
+length = 0.5
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(4, 4), Vector2i(5, 4), Vector2i(6, 4), Vector2i(7, 4)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5yufg"]
+_data = {
+&"Fall": SubResource("Animation_ujf17"),
+&"Idle": SubResource("Animation_afts6"),
+&"Jump": SubResource("Animation_mvh0q"),
+&"Move": SubResource("Animation_tige2"),
+&"RESET": SubResource("Animation_eje3e")
+}
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mlbbj"]
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("state_machine")]
+script = ExtResource("1_afts6")
+state_machine = NodePath("LimboHSM")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_5yufg")
+}
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0.800078, 0)
+alpha_cut = 1
+texture_filter = 0
+texture = ExtResource("1_mlbbj")
+hframes = 16
+vframes = 25
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.895323, 0.445417, 0, -0.445417, 0.895323, 0, 1.85367, 3.93206)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_mlbbj")
+
+[node name="LimboHSM" type="LimboHSM" parent="."]
+
+[node name="Idle" type="LimboState" parent="LimboHSM" node_paths=PackedStringArray("animation_player")]
+script = ExtResource("3_eje3e")
+animation_player = NodePath("../../AnimationPlayer")
+animation = &"Idle"
+
+[node name="Move" type="LimboState" parent="LimboHSM" node_paths=PackedStringArray("animation_player")]
+script = ExtResource("4_j77xm")
+animation_player = NodePath("../../AnimationPlayer")
+animation = &"Move"
+
+[node name="Jump" type="LimboState" parent="LimboHSM" node_paths=PackedStringArray("animation_player")]
+script = ExtResource("5_82w8a")
+animation_player = NodePath("../../AnimationPlayer")
+animation = &"Jump"
+
+[node name="Fall" type="LimboState" parent="LimboHSM" node_paths=PackedStringArray("animation_player")]
+script = ExtResource("6_82w8a")
+animation_player = NodePath("../../AnimationPlayer")
+animation = &"Fall"
+
+[node name="Attack" type="LimboState" parent="LimboHSM" node_paths=PackedStringArray("animation_player")]
+script = ExtResource("7_qcst6")
+animation_player = NodePath("../../AnimationPlayer")
+animation = &"Attack"
+
+[node name="AirAttack" type="LimboState" parent="LimboHSM" node_paths=PackedStringArray("animation_player")]
+script = ExtResource("8_deemb")
+animation_player = NodePath("../../AnimationPlayer")
+animation = &"AirAttack"
+
+[node name="Crouch" type="LimboState" parent="LimboHSM" node_paths=PackedStringArray("animation_player")]
+script = ExtResource("9_tige2")
+animation_player = NodePath("../../AnimationPlayer")
+animation = &"Crouch"
