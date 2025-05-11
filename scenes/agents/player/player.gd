@@ -23,6 +23,9 @@ func _initialize_state_machine() -> void:
 	state_machine.add_transition(state_machine.ANYSTATE, idle_state, "to_idle")
 	state_machine.add_transition(state_machine.ANYSTATE, jump_state, "to_jump")
 	state_machine.add_transition(state_machine.ANYSTATE, fall_state, "to_fall")
+	state_machine.add_transition(idle_state, crouch_state, "to_crouch")
+	state_machine.add_transition(idle_state, attack_state, "to_attack")
+	state_machine.add_transition(idle_state, air_attack_state, "to_air_attack")
 
 	state_machine.initial_state = idle_state
 	state_machine.initialize(self)
@@ -33,8 +36,29 @@ func update_sprite_direction():
 		sprite.flip_h = movement_input.x < 0
 
 func apply_movement(delta: float) -> void:
-	velocity.x = movement_input.x * SPEED
-	velocity.y = movement_input.y * SPEED
+	var direction = Vector3.ZERO
+	direction.x = movement_input.x
+	direction.z = movement_input.y
+
+	direction = global_transform.basis * direction
+	direction.y = 0
+
+	direction = direction.normalized()
+	velocity.x = direction.x * SPEED
+	velocity.z = direction.z * SPEED
+
+func check_attack_input():
+	if is_on_floor() and Input.is_action_just_pressed("attack"):
+		print("transition to attack state")
+		state_machine.dispatch("to_attack")
+	elif not is_on_floor() and Input.is_action_just_pressed("attack"):
+		print("transition to air attack state")
+		state_machine.dispatch("to_air_attack")
+
+func check_crouch_input():
+	if Input.is_action_just_pressed("crouch"):
+		print("transition to crouch state")
+		state_machine.dispatch("to_crouch")
 
 func check_jump_input():
 	if Input.is_action_just_pressed("jump"):
