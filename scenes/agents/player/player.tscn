@@ -10,6 +10,57 @@
 [ext_resource type="Script" uid="uid://dtugoiat5pj3g" path="res://scenes/agents/player/states/air_attack.gd" id="8_deemb"]
 [ext_resource type="Script" uid="uid://rugaqexljdgj" path="res://scenes/agents/player/states/crouch.gd" id="9_tige2"]
 
+[sub_resource type="Animation" id="Animation_8dgn0"]
+resource_name = "AirAttack"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 5), Vector2i(1, 5), Vector2i(2, 5), Vector2i(3, 5), Vector2i(4, 5), Vector2i(5, 5)]
+}
+
+[sub_resource type="Animation" id="Animation_w64iv"]
+resource_name = "Attack"
+length = 0.35
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 9), Vector2i(1, 9), Vector2i(2, 9), Vector2i(3, 9), Vector2i(4, 9), Vector2i(5, 9), Vector2i(6, 9)]
+}
+
+[sub_resource type="Animation" id="Animation_peglp"]
+resource_name = "Crouch"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 7), Vector2i(1, 7), Vector2i(2, 7)]
+}
+
 [sub_resource type="Animation" id="Animation_ujf17"]
 resource_name = "Fall"
 length = 0.5
@@ -93,57 +144,6 @@ tracks/0/keys = {
 "values": [Vector2i(0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_peglp"]
-resource_name = "Crouch"
-length = 0.3
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame_coords")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [Vector2i(0, 7), Vector2i(1, 7), Vector2i(2, 7)]
-}
-
-[sub_resource type="Animation" id="Animation_w64iv"]
-resource_name = "Attack"
-length = 0.35
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame_coords")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2i(0, 9), Vector2i(1, 9), Vector2i(2, 9), Vector2i(3, 9), Vector2i(4, 9), Vector2i(5, 9), Vector2i(6, 9)]
-}
-
-[sub_resource type="Animation" id="Animation_8dgn0"]
-resource_name = "AirAttack"
-length = 0.3
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame_coords")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2i(0, 5), Vector2i(1, 5), Vector2i(2, 5), Vector2i(3, 5), Vector2i(4, 5), Vector2i(5, 5)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5yufg"]
 _data = {
 &"AirAttack": SubResource("Animation_8dgn0"),
@@ -218,3 +218,5 @@ animation = &"AirAttack"
 script = ExtResource("9_tige2")
 animation_player = NodePath("../../AnimationPlayer")
 animation = &"Crouch"
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

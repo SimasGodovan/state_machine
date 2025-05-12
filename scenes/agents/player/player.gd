@@ -25,7 +25,7 @@ func _initialize_state_machine() -> void:
 	state_machine.add_transition(state_machine.ANYSTATE, fall_state, "to_fall")
 	state_machine.add_transition(idle_state, crouch_state, "to_crouch")
 	state_machine.add_transition(idle_state, attack_state, "to_attack")
-	state_machine.add_transition(idle_state, air_attack_state, "to_air_attack")
+	state_machine.add_transition(jump_state, air_attack_state, "to_air_attack")
 
 	state_machine.initial_state = idle_state
 	state_machine.initialize(self)
@@ -72,3 +72,10 @@ func _physics_process(delta: float) -> void:
 	movement_input = Input.get_vector("left", "right", "up", "down")
 
 	move_and_slide()
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "attack":
+		state_machine.dispatch("to_idle")
+
+	if anim_name == "AirAttack":
+		state_machine.dispatch("to_fall")
